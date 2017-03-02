@@ -29,6 +29,7 @@ const removeDocsFromTemplate = template =>
 
 
 function includeTemplatesAtIndex(output, settings) {
+
     var debug = parseSetting(settings, 'debug', false);
     var removeDocs = parseSetting(settings, 'removeDocs', false);
     var suffix = parseSetting(settings, 'suffix', '.tmpl.html');
@@ -38,42 +39,42 @@ function includeTemplatesAtIndex(output, settings) {
 
     var includeIndex = output.indexOf(includeMarker);
 
-    if (includeIndex !== -1) {
-        var changedOutput = '';
-        var wildcard = path + '**/*' + suffix;
-
-        changedOutput += output.substring(0, includeIndex);
-
-        var templates = glob.sync(wildcard);
-
-        if (templates) {
-            templates.forEach(function (templatePath) {
-                var templateName = getTemplateName(templatePath, defaultPath, suffix);
-
-                if (debug) {
-                    gulpUtil.log('Processing template', templateName);
-                }
-
-                var template = String(fs.readFileSync(templatePath));
-
-                if (removeDocs) {
-                    template = removeDocsFromTemplate(template);
-                }
-
-                changedOutput += '<script type="text/html" id="' + templateName + '">' + template + '</script>';
-            });
-        } else {
-            gulpUtil.log('No templates found at ', wildcard);
-        }
-
-        changedOutput += output.substring(includeIndex + includeMarker.length);
-
-        return changedOutput;
-    } else {
+    if (includeIndex === -1) {
         gulpUtil.log('No include marker found.');
+        return output;
     }
 
-    return output;
+    var changedOutput = '';
+    var wildcard = path + '**/*' + suffix;
+
+    changedOutput += output.substring(0, includeIndex);
+
+    var templates = glob.sync(wildcard);
+
+    if (templates) {
+        templates.forEach(function (templatePath) {
+            var templateName = getTemplateName(templatePath, defaultPath, suffix);
+
+            if (debug) {
+                gulpUtil.log('Processing template', templateName);
+            }
+
+            var template = String(fs.readFileSync(templatePath));
+
+            if (removeDocs) {
+                template = removeDocsFromTemplate(template);
+            }
+
+            changedOutput += '<script type="text/html" id="' + templateName + '">' + template + '</script>';
+        });
+    } else {
+        gulpUtil.log('No templates found at ', wildcard);
+    }
+
+    changedOutput += output.substring(includeIndex + includeMarker.length);
+
+    return changedOutput;
+
 }
 
 function getTemplateName(templatePath, path, suffix) {
