@@ -81,7 +81,9 @@ function getTemplateName(templatePath, path, suffix) {
 }
 
 function parseSetting(settings, name, defaultValue) {
-    return (settings && typeof settings[name] !== 'undefined') ? settings[name] : defaultValue;
+    return settings && typeof settings[name] !== 'undefined' 
+        ? settings[name] 
+        : defaultValue;
 }
 
 module.exports = function (settings) {
