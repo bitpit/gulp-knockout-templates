@@ -63,7 +63,7 @@ function includeTemplatesAtIndex(output, settings) {
                 template = removeDocsFromTemplate(template);
             }
 
-            changedOutput += '<script type="text/html" id="' + templateName + '">' + template + '</script>';
+            changedOutput += `<script type="text/html" id="${templateName}">${template}</script>`;
         });
     } else {
         gulpUtil.log('No templates found at ', wildcard);
