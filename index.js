@@ -5,12 +5,12 @@
  Version 0.0.5
  */
 
-var fs = require('fs');
-var glob = require('glob');
-var evs = require('event-stream');
-var gulpUtil = require('gulp-util');
+const fs = require('fs');
+const glob = require('glob');
+const evs = require('event-stream');
+const gulpUtil = require('gulp-util');
 
-var includeMarker = '<!-- Gulp Knockout Templates -->';
+const includeMarker = '<!-- Gulp Knockout Templates -->';
 
 function includeTemplatesAtIndex(output, settings) {
     var debug = parseSetting(settings, 'debug', false);
