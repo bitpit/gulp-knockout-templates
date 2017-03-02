@@ -18,7 +18,7 @@ const removeDocsRegex = /\<\!\-\-\s?parameters:[\s\S]*?\-\-\>/;
  * these descriptions tend to get bulky, so it is nice to remove those when building production version.
  * Other comments are not affected by this simple cleanup.
  */
-const removeDocsFromTemplate = template =>
+const removeDocsFromTemplate = (template, debug) =>
     template.replace(removeDocsRegex, match => {
         if (debug) {
             gulpUtil.log('Removed docs', match);
@@ -30,14 +30,14 @@ const removeDocsFromTemplate = template =>
 
 function includeTemplatesAtIndex(output, settings) {
 
-    let debug = parseSetting(settings, 'debug', false);
-    let removeDocs = parseSetting(settings, 'removeDocs', false);
-    let suffix = parseSetting(settings, 'suffix', '.tmpl.html');
-    let path = parseSetting(settings, 'path', './');
-    let defaultPath = parseSetting(settings, 'defaultPath', path);
+    const debug = parseSetting(settings, 'debug', false);
+    const removeDocs = parseSetting(settings, 'removeDocs', false);
+    const suffix = parseSetting(settings, 'suffix', '.tmpl.html');
+    const path = parseSetting(settings, 'path', './');
+    const defaultPath = parseSetting(settings, 'defaultPath', path);
 
 
-    let includeIndex = output.indexOf(includeMarker);
+    const includeIndex = output.indexOf(includeMarker);
 
     if (includeIndex === -1) {
         gulpUtil.log('No include marker found.');
@@ -45,13 +45,14 @@ function includeTemplatesAtIndex(output, settings) {
     }
 
     let changedOutput = output.substring(0, includeIndex);
-    let wildcard = path + '**/*' + suffix;
+    const wildcard = path + '**/*' + suffix;
 
-    let templates = glob.sync(wildcard);
+    const templates = glob.sync(wildcard);
 
     if (templates) {
         templates.forEach(function (templatePath) {
-            let templateName = getTemplateName(templatePath, defaultPath, suffix);
+
+            const templateName = getTemplateName(templatePath, defaultPath, suffix);
 
             if (debug) {
                 gulpUtil.log('Processing template', templateName);
@@ -60,7 +61,7 @@ function includeTemplatesAtIndex(output, settings) {
             let template = String(fs.readFileSync(templatePath));
 
             if (removeDocs) {
-                template = removeDocsFromTemplate(template);
+                template = removeDocsFromTemplate(template, debug);
             }
 
             changedOutput += `<script type="text/html" id="${templateName}">${template}</script>`;
