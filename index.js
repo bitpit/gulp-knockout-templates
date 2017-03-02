@@ -87,13 +87,15 @@ function parseSetting(settings, name, defaultValue) {
         : defaultValue;
 }
 
-module.exports = function (settings) {
-    function includeTemplates(file) {
-        var contents = String(file.contents);
+module.exports = function(settings){ 
+
+    return evs.through(function(file) {
 
         if (file.isStream()) {
             this.emit('error', new gulpUtil.PluginError('gulp-knockout-templates', 'Currently streams are not supported.'));
         }
+
+        let contents = String(file.contents);
 
         if (file.isBuffer()) {
             contents = includeTemplatesAtIndex(contents, settings);
@@ -101,7 +103,6 @@ module.exports = function (settings) {
         }
 
         this.emit('data', file);
-    }
 
-    return evs.through(includeTemplates);
-};
+    });
+}
