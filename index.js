@@ -36,7 +36,6 @@ function includeTemplatesAtIndex(output, settings) {
     const path = parseSetting(settings, 'path', './');
     const defaultPath = parseSetting(settings, 'defaultPath', path);
 
-
     const includeIndex = output.indexOf(includeMarker);
 
     if (includeIndex === -1) {
@@ -45,8 +44,8 @@ function includeTemplatesAtIndex(output, settings) {
     }
 
     let changedOutput = output.substring(0, includeIndex);
-    const wildcard = path + '**/*' + suffix;
 
+    const wildcard = `${path}**/*${suffix}`;
     const templates = glob.sync(wildcard);
 
     if (templates) {
