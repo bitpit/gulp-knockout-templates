@@ -12,6 +12,21 @@ const gulpUtil = require('gulp-util');
 
 const includeMarker = '<!-- Gulp Knockout Templates -->';
 
+/**
+ * Templates may have descriptions in format <!-- parameters: ... -->,
+ * these descriptions tend to get bulky, so it is nice to remove those when building production version.
+ * Other comments are not affected by this simple cleanup.
+ */
+const removeDocsFromTemplate = template =>
+    template.replace(removeDocsRegex, match => {
+        if (debug) {
+            gulpUtil.log('Removed docs', match);
+        }
+
+        return '';
+    });
+
+
 function includeTemplatesAtIndex(output, settings) {
     var debug = parseSetting(settings, 'debug', false);
     var removeDocs = parseSetting(settings, 'removeDocs', false);
@@ -19,22 +34,6 @@ function includeTemplatesAtIndex(output, settings) {
     var path = parseSetting(settings, 'path', './');
     var defaultPath = parseSetting(settings, 'defaultPath', path);
 
-    /**
-     * Templates may have descriptions in format <!-- parameters: ... -->,
-     * these descriptions tend to get bulky, so it is nice to remove those when building production version.
-     * Other comments are not affected by this simple cleanup.
-     */
-    function removeDocsFromTemplate(template) {
-        var removeDocsRegex = /\<\!\-\-\s?parameters:[\s\S]*?\-\-\>/;
-
-        return template.replace(removeDocsRegex, function (match) {
-            if (debug) {
-                gulpUtil.log('Removed docs', match);
-            }
-
-            return '';
-        });
-    }
 
     var includeIndex = output.indexOf(includeMarker);
 
