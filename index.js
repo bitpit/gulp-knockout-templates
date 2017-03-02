@@ -11,6 +11,7 @@ const evs = require('event-stream');
 const gulpUtil = require('gulp-util');
 
 const includeMarker = '<!-- Gulp Knockout Templates -->';
+const removeDocsRegex = /\<\!\-\-\s?parameters:[\s\S]*?\-\-\>/;
 
 /**
  * Templates may have descriptions in format <!-- parameters: ... -->,
