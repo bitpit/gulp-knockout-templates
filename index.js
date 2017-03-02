@@ -44,10 +44,8 @@ function includeTemplatesAtIndex(output, settings) {
         return output;
     }
 
-    let changedOutput = '';
+    let changedOutput = output.substring(0, includeIndex);
     let wildcard = path + '**/*' + suffix;
-
-    changedOutput += output.substring(0, includeIndex);
 
     let templates = glob.sync(wildcard);
 
