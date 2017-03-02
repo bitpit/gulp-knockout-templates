@@ -30,36 +30,36 @@ const removeDocsFromTemplate = template =>
 
 function includeTemplatesAtIndex(output, settings) {
 
-    var debug = parseSetting(settings, 'debug', false);
-    var removeDocs = parseSetting(settings, 'removeDocs', false);
-    var suffix = parseSetting(settings, 'suffix', '.tmpl.html');
-    var path = parseSetting(settings, 'path', './');
-    var defaultPath = parseSetting(settings, 'defaultPath', path);
+    let debug = parseSetting(settings, 'debug', false);
+    let removeDocs = parseSetting(settings, 'removeDocs', false);
+    let suffix = parseSetting(settings, 'suffix', '.tmpl.html');
+    let path = parseSetting(settings, 'path', './');
+    let defaultPath = parseSetting(settings, 'defaultPath', path);
 
 
-    var includeIndex = output.indexOf(includeMarker);
+    let includeIndex = output.indexOf(includeMarker);
 
     if (includeIndex === -1) {
         gulpUtil.log('No include marker found.');
         return output;
     }
 
-    var changedOutput = '';
-    var wildcard = path + '**/*' + suffix;
+    let changedOutput = '';
+    let wildcard = path + '**/*' + suffix;
 
     changedOutput += output.substring(0, includeIndex);
 
-    var templates = glob.sync(wildcard);
+    let templates = glob.sync(wildcard);
 
     if (templates) {
         templates.forEach(function (templatePath) {
-            var templateName = getTemplateName(templatePath, defaultPath, suffix);
+            let templateName = getTemplateName(templatePath, defaultPath, suffix);
 
             if (debug) {
                 gulpUtil.log('Processing template', templateName);
             }
 
-            var template = String(fs.readFileSync(templatePath));
+            let template = String(fs.readFileSync(templatePath));
 
             if (removeDocs) {
                 template = removeDocsFromTemplate(template);
